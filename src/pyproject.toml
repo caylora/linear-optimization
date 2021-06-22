@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "linear-optimization"
+name = "linearoptimization"
 version = "0.1.0"
 description = "simplex method implementation"
 authors = ["Alton Caylor <caylora@allegheny.edu>"]

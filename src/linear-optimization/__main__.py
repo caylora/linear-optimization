@@ -1,1 +1,0 @@
-"""Main entrypoint for the program."""
