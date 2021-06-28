@@ -41,7 +41,6 @@ def iterate_simplex():
     print("--------------------")
     print("State:")
     print("Maximize: ", end="")
-    global n
     for j in range(n):
         print(f"{c[j]}x_{N[j]} + ", end="")
     print(f"{v}")
@@ -100,7 +99,7 @@ def initialize_simplex():
     v_old = v
     # Aux. objective function
     c[n - 1] = -1
-    for j in range(n):
+    for j in range(n - 1):
         c[j] = 0
     v = 0
     # Aux. coefficients
@@ -188,6 +187,8 @@ def run(
     constr_value_vector,
     objfunc_coeff_vector,
     constant,
+    nonbasic_vector,
+    basic_vector,
 ):
     """Main entrypoint for the code."""
     global n, m, A, b, c, v, N, B
@@ -197,8 +198,8 @@ def run(
     b = constr_value_vector  # Vector of constraint values
     c = objfunc_coeff_vector  # Vector of objective function variables
     v = constant  # Constant
-    N = np.zeros(n, np.intc)  # Nonbasic variables
-    B = np.zeros(m, np.intc)  # Basic variables
+    N = nonbasic_vector  # Nonbasic variables
+    B = basic_vector  # Basic variables
 
     ret = simplex()
     if ret[1] == np.inf:
