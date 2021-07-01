@@ -213,3 +213,4 @@ def run(
             st = ", " if i < n + m - 1 else ")\n"
             print(f"{ret[0][i]}{st}", end="")
         print(f"Optimal objective value: {ret[1]}\n")
+    return ret[1]
