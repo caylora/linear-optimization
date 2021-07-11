@@ -30,7 +30,17 @@ with open(file_name, newline="") as csvfile:
     row = list(map(float, next(csv_reader)))
     for i in range(variables):
         c[i] = row[i]
-
+with open('input/pvwatts_hourly.csv', newline="") as e_data:
+    csv_reader = csv.reader(e_data)
+    for i in range(18):
+        next(csv_reader)
+    solar_data = []
+    for row in csv_reader:
+        solar_data.append(np.longdouble(row[-1]))
+    total = solar_data.pop()
+    sum_total = sum(solar_data)
+    print(total, sum_total)
+    
 # Define the parameters of the problem:
 # variables, constraints = 3, 3  # Number of variables, constraints
 # A[0, 0], A[0, 1], A[0, 2] = -2, -3, -1
