@@ -10,4 +10,4 @@ poetry install;
 poetry run python linearoptimization;
 ```
 
-In the current version of the program, the values for the optimization problem can be manually added to `__main__.py`, future versions of the program will allow for input via a `.CSV` file.
+The current version of the program accepts values for the optimization problem via a `.CSV` file. This file should be structured such that the first line contains the number of variables and the number of constraints, the next section should contain the coefficients of the constraints, and the final two lines should contain the constraint values and objective function coefficients.
