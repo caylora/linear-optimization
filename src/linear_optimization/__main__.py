@@ -1,6 +1,6 @@
 """Main entrypoint for the program."""
 
-import linearoptimization as lo
+import linear_optimization as lo
 import numpy as np
 import csv
 
@@ -12,7 +12,7 @@ c = np.empty(MAX_N)  # Vector of objective function variables
 v = 0  # Constant
 N = np.empty(MAX_N, np.intc)  # Nonbasic variables
 B = np.empty(MAX_M, np.intc)  # Basic variables
-file_name = input("Enter file location: ")
+file_name = input("Enter file location: ") or "input/program.csv"
 with open(file_name, newline="") as csvfile:
     csv_reader = csv.reader(csvfile)
     # Read the first line for no. variables and constraints
@@ -30,17 +30,26 @@ with open(file_name, newline="") as csvfile:
     row = list(map(float, next(csv_reader)))
     for i in range(variables):
         c[i] = row[i]
-with open('input/pvwatts_hourly.csv', newline="") as e_data:
-    csv_reader = csv.reader(e_data)
+with open("input/pvwatts_hourly.csv", newline="") as pvwatts:
+    csv_reader = csv.reader(pvwatts)
     for i in range(18):
         next(csv_reader)
     solar_data = []
     for row in csv_reader:
-        solar_data.append(np.longdouble(row[-1]))
+        solar_data.append(float(row[-1]))
     total = solar_data.pop()
-    sum_total = sum(solar_data)
+    solar_data = np.array(solar_data)
+    sum_total = np.sum(solar_data)
     print(total, sum_total)
-    
+with open("input/usage.csv", newline="") as e_data:
+    csv_reader = csv.reader(e_data)
+    for i in range(6):
+        next(csv_reader)
+    usage_data = []
+    for row in csv_reader:
+        usage_data.append(float(row[-3]))
+    usage_data = np.array(usage_data)
+
 # Define the parameters of the problem:
 # variables, constraints = 3, 3  # Number of variables, constraints
 # A[0, 0], A[0, 1], A[0, 2] = -2, -3, -1
@@ -60,6 +69,24 @@ with open('input/pvwatts_hourly.csv', newline="") as e_data:
 # A[1, 0], A[1, 1] = -1 / 0.193, -1 / 0.193
 # b[0], b[1] = 5760, 30
 # c[0], c[1] = -2000 + 0.1 * 1100 * 20, -2000 + 0.04 * 1100 * 20
+
+# TODO: Process data to fit solar equation
+# C_A = cost of array       $/kW
+# x_A1 & x_A2 = capacities  kW
+# P_R & P_W = prices of E   $/kWh
+# K = annual production     kWh/yr
+# C_B = cost of battery     $/kWh
+# x_B = battery capacity    kWh
+# D = solar area usage      m^2/kW
+# U_tot = energy usage      kWh/yr
+# A_roof = area of roof     m^2
+
+# maximize
+#   (-C_A + P_R * K) * x_A1 + (-C_A + P_W * K) * x_A2 - C_B * x_B
+# subj. to
+#   -K * x_A1 + U_tot = w_1
+#   -D * x_A1 - D * x_A2 + A_roof = w_2
+#   x_A1, x_A2, w_1, w_2
 
 # Pass the parameters to the solving algorithm
 lo.run(variables, constraints, A, b, c, v, N, B)
