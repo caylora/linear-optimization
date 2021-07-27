@@ -136,7 +136,7 @@ def initialize_simplex():
         if N[j] > n:
             N[j] -= 1
     for i in range(m):
-        if B[i] > n:  # should this be m? idk
+        if B[i] > n:
             B[i] -= 1
 
     for j in range(n):
@@ -201,16 +201,16 @@ def run(
     N = nonbasic_vector  # Nonbasic variables
     B = basic_vector  # Basic variables
 
-    ret = simplex()
-    if ret[1] == np.inf:
-        if ret[0][0] == -1:
+    result = simplex()
+    if result[1] == np.inf:
+        if result[0][0] == -1:
             print("Objective function unbounded!\n")
-        elif ret[0][0] == -2:
+        elif result[0][0] == -2:
             print("Linear program infeasible!\n")
     else:
         print("Solution: (", end="")
         for i in range(n + m):
             st = ", " if i < n + m - 1 else ")\n"
-            print(f"{ret[0][i]}{st}", end="")
-        print(f"Optimal objective value: {ret[1]}\n")
-    return ret[1]
+            print(f"{result[0][i]}{st}", end="")
+        print(f"Optimal objective value: {result[1]}\n")
+    return result
