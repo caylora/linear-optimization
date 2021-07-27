@@ -49,12 +49,6 @@ for i in range(len(USAGE_CONSTRAINTS)):
     A[i + 2, 0], A[i + 2, 1], A[i + 2, 2] = 0, 0, 1
     b[i + 2] = -USAGE_CONSTRAINTS[i]
 variables, constraints = 3, len(USAGE_CONSTRAINTS) + 2
-# sample house
-# A[0, 0], A[0, 1] = -1100, 0
-# A[1, 0], A[1, 1] = -1 / 0.193, -1 / 0.193
-# b[0], b[1] = 5760, 30
-# c[0], c[1] = -2000 + 0.1 * 1100 * 20, -2000 + 0.04 * 1100 * 20
-
 
 # C_A = cost of array           $/kW
 # x_A1 = solar cap. retail      kW
