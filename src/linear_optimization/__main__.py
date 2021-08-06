@@ -41,22 +41,21 @@ B = np.empty(MAX_M, np.intc)  # Basic variables
 
 # Process data to fit solar equation
 # Define the parameters of the problem:
+variables, constraints = 3, 3
+# Find the constraint with the largest difference between usage and production
+
+diff = np.subtract(USAGE_CONSTRAINTS, PRODUCTION_CONSTRAINTS)
+loc = np.argmax(diff)
+
 A[0, 0], A[0, 1], A[0, 2] = -ANNUAL_PRODUCTION, 0, 0
 A[1, 0], A[1, 1], A[1, 2] = -AREA_USAGE, -AREA_USAGE, 0
-b[0], b[1] = TOTAL_USAGE, ROOF_AREA
+A[2, 0], A[2, 1], A[2, 2] = PRODUCTION_CONSTRAINTS[loc], PRODUCTION_CONSTRAINTS[loc], 1
+b[0], b[1], b[2] = TOTAL_USAGE, ROOF_AREA, -USAGE_CONSTRAINTS[loc]
 c[0], c[1], c[2] = (
     (-TAX_MODIFIER * ARRAY_COST + P_RETAIL_COST * ANNUAL_PRODUCTION),
     (-TAX_MODIFIER * ARRAY_COST + P_WHOLESALE_COST * ANNUAL_PRODUCTION),
     -BATTERY_COST,
 )
-
-# Find the constraint with the largest difference between usage and production
-diff = np.subtract(USAGE_CONSTRAINTS, PRODUCTION_CONSTRAINTS)
-loc = np.argmax(diff)
-
-A[2, 0], A[2, 1], A[2, 2] = PRODUCTION_CONSTRAINTS[loc], PRODUCTION_CONSTRAINTS[loc], 1
-b[2] = -USAGE_CONSTRAINTS[loc]
-variables, constraints = 3, 3
 
 # C_A = cost of array                   $/kW
 # x_A1 = solar cap. retail              kW
